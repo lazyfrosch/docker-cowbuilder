@@ -3,6 +3,8 @@
 : ${DIST:=}
 : ${BUILDRESULT:="$PWD/result"}
 
+CMD=`basename "$0"`
+
 docker run -it --rm \
     -e WORKDIR="$PWD" \
     -e UID=`id -u` \
@@ -12,4 +14,4 @@ docker run -it --rm \
     -v "$HOME":"$HOME" \
     -v /data/cache/cowbuilder:/var/cache/pbuilder \
     --privileged \
-    lazyfrosch/cowbuilder cowbuilder-auto "$@"
+    lazyfrosch/cowbuilder "$CMD" "$@"

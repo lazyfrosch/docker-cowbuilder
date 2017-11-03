@@ -25,6 +25,16 @@ and updating the base chroots.
     cowbuilder login --distribution stretch
     # will create / update and give you a prompt inside
 
+## Install helper scripts
+
+    cp cowbuilder-helper.example.sh ~/bin/cowbuilder-helper
+    edit ~/bin/cowbuilder-helper  # to your needs
+    cd ~/bin/
+    ln -svf cowbuilder-helper cowbuilder
+    ln -svf cowbuilder-helper cowbuilder-auto
+    ln -svf cowbuilder-helper uscan
+    ln -svf cowbuilder-helper dpkg-source
+
 ## Important notes
 
 About the helper script.
