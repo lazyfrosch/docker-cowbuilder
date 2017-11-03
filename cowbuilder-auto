@@ -54,11 +54,11 @@ fi
 if [ -z "$NOUPDATE" ]; then
     if [ ! -d "$BASEPATH" ]; then
         echo "Auto-creating distribution dir: $BASEPATH"
-        cowbuilder create --basepath "$BASEPATH" --distribution "$DIST"
+        sudo cowbuilder create --basepath "$BASEPATH" --distribution "$DIST"
     else
         echo "Running update for distribution"
-        cowbuilder update --basepath "$BASEPATH" --distribution "$DIST"
+        sudo cowbuilder update --basepath "$BASEPATH" --distribution "$DIST"
     fi
 fi
 
-cowbuilder "$ACTION" --basepath "$BASEPATH" --distribution "$DIST" "${ARGS[@]}"
+sudo cowbuilder "$ACTION" --basepath "$BASEPATH" --distribution "$DIST" "${ARGS[@]}"
