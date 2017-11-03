@@ -1,0 +1,64 @@
+#!/bin/bash
+
+set -ex
+
+: ${DIST:=}
+
+BASEDIR=/var/cache/pbuilder
+BASEPATH=
+ARGS=()
+ACTION=""
+NOUPDATE=
+
+while [[ $# -gt 0 ]]
+do
+    case "$1" in
+        --distribution)
+            DIST="$2"
+            shift
+            ;;
+        --no-update|--noupdate)
+            NOUPDATE=1
+            ;;
+        help|--help|create|--create|update|--update)
+            NOUPDATE=1
+            ACTION="$1"
+            ;;
+        --basepath)
+            BASEPATH="$2"
+            shift
+            ;;
+        login|build|execute|--login|--build|--execute)
+            ACTION="$1"
+            ;;
+        *)
+            ARGS+=("$1")
+            ;;
+    esac
+    shift
+done
+
+if [ -z "$ACTION" ]; then
+    echo "No action specified!" >&2
+    exit 1
+fi
+
+if [ -z "$BASEPATH" ]; then
+    if [ -n "$DIST" ]; then
+        BASEPATH="${BASEDIR}/base-${DIST}.cow"
+    else
+        BASEPATH="${BASEDIR}/base.cow"
+    fi
+fi
+
+if [ -z "$NOUPDATE" ]; then
+    if [ ! -d "$BASEPATH" ]; then
+        echo "Auto-creating distribution dir: $BASEPATH"
+        cowbuilder create --basepath "$BASEPATH" --distribution "$DIST"
+    else
+        echo "Running update for distribution"
+        cowbuilder update --basepath "$BASEPATH" --distribution "$DIST"
+    fi
+fi
+
+cowbuilder "$ACTION" --basepath "$BASEPATH" --distribution "$DIST" "${ARGS[@]}"
